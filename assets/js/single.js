@@ -3,11 +3,21 @@ var issueContainerEl = document.querySelector("#issues-container");
 // GET /repos/:owner/:repo/Issues
 // https://api.github.com/repos/<repo>/issues
 
-var repo = "SteveHoltRules/git-it-done"
+// var repo = "SteveHoltRules/git-it-done"
+var repoNameEl = document.querySelector("#repo-name");
 
-// var apiUrl = "https://api.github.com/repos/"+ repo +"/issues?direction=asc";
-var apiUrl = `https://api.github.com/repos/${repo}/issues?direction=asc`;
-console.log(apiUrl);
+
+var getRepoName = function(){
+  console.log("in getRepoName");
+  //Search the document
+  var queryString= document.location.search;
+  console.log(queryString);
+  //Return the document location and split it at the demarkation
+  var repoName = queryString.split("=")[1];
+  console.log(repoName);
+  getRepoIssues(repoName);
+  repoNameEl.textContent = repoName;
+};
 
 var limitWarningEl = document.querySelector("#limit-warning");
 
@@ -19,15 +29,15 @@ var displayWarning = function(repo) {
   linkEl.textContent = "See more Issues on GitHub.com";
   linkEl.setAttribute("href", `https://github.com/${repo}/issues`);
   linkEl.setAttribute("target", "_blank");
-
   //append to warning container
   limitWarningEl.appendChild(linkEl);
-}
+};
 
 
-
-var getRepoIssues = function (repo) {
+var getRepoIssues = function(repo) {
   console.log(repo);
+
+  var apiUrl = `https://api.github.com/repos/${repo}/issues?direction=asc`;
 
   fetch(apiUrl).then(function (response) {
     //request was successful
@@ -86,4 +96,4 @@ var displayIssues = function (issues) {
 };
 
 
-getRepoIssues("facebook/react");
+getRepoName();
